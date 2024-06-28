@@ -1,8 +1,6 @@
 name: Setup Embedded Python
 description: Downloads python embed of version specified, installs all modules in requirements.txt and gets it ready for using
 
-inputs:
-
 
 runs:
   using: 'node20'
