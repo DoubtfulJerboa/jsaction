@@ -14,7 +14,7 @@ try {
         process.exit(1)
     }
     const fs = require("fs")
-    const embedResult = await github.request("https://www.python.org/ftp/python/"+PYTHON_VERSION+"/python-"+PYTHON_VERSION+"-embed-amd64.zip")
+    const embedResult = github.request("https://www.python.org/ftp/python/"+PYTHON_VERSION+"/python-"+PYTHON_VERSION+"-embed-amd64.zip")
     fs.writeFile("python-embed.zip", Buffer.from(embedResult.data), (err)=>{ if (err) throw err; console.log('File saved');});
 
 
@@ -27,7 +27,7 @@ try {
         console.log('Saved!');
     });
 
-    const pipResult = await github.request("https://bootstrap.pypa.io/get-pip.py")
+    const pipResult = github.request("https://bootstrap.pypa.io/get-pip.py")
     fs.writeFile("get-pip.py", Buffer.from(pipResult.data), (err)=>{ if (err) throw err; console.log('File saved');})
 
     exec(".\\python-embed\\python.exe .\\get-pip.py")
