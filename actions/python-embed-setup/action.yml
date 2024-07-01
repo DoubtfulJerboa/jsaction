@@ -8,4 +8,4 @@ inputs:
 
 runs:
   using: 'node20'
-  main: "./setup_embed.js"
+  main: "./dist/index.js"
