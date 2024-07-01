@@ -2,23 +2,25 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 const unzip = require('unzip-stream');
-const fs = require("fs-extra");
+const fs = require("fs");
+const axios = require('axios');
 
 const exec = require('child_process').exec;
 
-try {
-    const {PYTHON_VERSION} = process.env
+async function main() {
+// try {
+    // const {PYTHON_VERSION} = process.env
+    const PYTHON_VERSION = "3.11.4"
     const match = PYTHON_VERSION.match("^[0-9]\.[0-9]{1,2}\.[0-9]{1,2}$")
     if (!match){
         console.error("Invalid python version")
         process.exit(1)
     }
-    const fs = require("fs")
-    const embedResult = github.request("https://www.python.org/ftp/python/"+PYTHON_VERSION+"/python-"+PYTHON_VERSION+"-embed-amd64.zip")
-    fs.writeFile("python-embed.zip", Buffer.from(embedResult.data), (err)=>{ if (err) throw err; console.log('File saved');});
-
-
-    fs.createReadStream('./python-embed.zip').pipe(unzip.Extract({ path: './python-embed' }));
+    let res = await axios.get(`https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-embed-amd64.zip`).then(function (response) {
+      return response.data});
+    
+    fs.writeFileSync("./python-embed.zip", Buffer.from(res), (err)=>{ 
+        if (err) throw err;}); console.log('python-embed.zip saved'); 
 
     const pth = PYTHON_VERSION.split(".").slice(0,2).join("")
 
@@ -33,6 +35,6 @@ try {
     exec(".\\python-embed\\python.exe .\\get-pip.py")
 
 
-  } catch (error) {
-    core.setFailed(error.message);
-  }
+      }
+
+main()
