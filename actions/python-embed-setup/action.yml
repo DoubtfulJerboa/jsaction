@@ -4,7 +4,7 @@ description: Downloads python embed of version specified, installs all modules i
 inputs:
   PVER:
     description: pythonn version
-      default: 3.11.4
+    default: 3.11.4
 
 runs:
   using: 'node20'
