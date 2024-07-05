@@ -9,7 +9,7 @@ const exec = require('child_process').exec;
 
 
 async function unzippo(zipSource, zipDest) {
-  fsx.createReadStream(zipSource)
+  fs.createReadStream(zipSource)
   .pipe( unzip.Extract({ path: zipDest }));
 
 
