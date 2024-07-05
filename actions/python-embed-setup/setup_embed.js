@@ -1,5 +1,5 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+// const core = require('@actions/core');
+// const github = require('@actions/github');
 
 const unzip = require('unzip-stream');
 const fs = require("fs");
