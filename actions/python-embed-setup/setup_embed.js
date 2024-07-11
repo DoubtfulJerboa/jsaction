@@ -5,7 +5,7 @@ const StreamZip = require('node-stream-zip');
 const fs = require("fs");
 const axios = require('axios');
 
-const exec = require('child_process').exec;
+const execSync = require('child_process').execSync;
 
 
 async function unzippo(zipSource, zipDest) {
@@ -58,9 +58,9 @@ await extract("./python-embed.zip", {dir: target})
     console.log('get-pip.py saved');
     
 
-    exec(".\\python-embed\\python.exe .\\get-pip.py")
+    execSync(".\\python-embed\\python.exe .\\get-pip.py")
 
-
+    execSync(`.\\python-embed\\python.exe -m pip install -r ${REQUIREMENTS_PATH}`)
   } catch (error) {
     core.setFailed(error.message);
    
