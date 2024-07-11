@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-const unzip = require('unzip-stream');
+const StreamZip = require('node-stream-zip');
 const fs = require("fs");
 const axios = require('axios');
 
@@ -9,15 +9,14 @@ const exec = require('child_process').exec;
 
 
 async function unzippo(zipSource, zipDest) {
-  fs.createReadStream(zipSource)
-  .pipe( unzip.Extract({ path: zipDest }));
-
-
-  console.log("extracted???")
+  const zip = new StreamZip.async({ file: zipSource });
+  fs.mkdirSync(zipDest);
+  const count = await zip.extract(null, zipDest);
+  console.log(`Extracted ${zipSource}`);
+  await zip.close();
 }
 
 async function main() {
-  console.log("test pass!")
 try {
     // const {PYTHON_VERSION} = process.env
     const PYTHON_VERSION = "3.11.4"
@@ -33,7 +32,7 @@ try {
     fs.writeFileSync("./python-embed.zip", Buffer.from(res), (err)=>{ 
         if (err) throw err;}); console.log('python-embed.zip saved'); 
 
-    await unzippo("./python-embed.zip", "D:/Dev/TestScripts/jsaction/python-embed")    
+    await unzippo("./python-embed.zip", "./")    
 
 /*
 fs.createReadStream("./python-embed.zip")
