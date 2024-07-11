@@ -11,7 +11,7 @@ const exec = require('child_process').exec;
 async function unzippo(zipSource, zipDest) {
   const zip = new StreamZip.async({ file: zipSource });
   fs.mkdirSync(zipDest);
-  const count = await zip.extract(null, zipDest);
+  await zip.extract(null, zipDest);
   console.log(`Extracted ${zipSource}`);
   await zip.close();
 }
@@ -26,13 +26,13 @@ try {
         process.exit(1)
     }
     // const fs = require("fs")
-    let res = await axios.get(`https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-embed-amd64.zip`).then(function (response) {
+    let res = await axios({method: "get", url:`https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-embed-amd64.zip`, responseType: "arraybuffer"}).then(function (response) {
       return response.data});
     
     fs.writeFileSync("./python-embed.zip", Buffer.from(res), (err)=>{ 
         if (err) throw err;}); console.log('python-embed.zip saved'); 
 
-    await unzippo("./python-embed.zip", "./")    
+    await unzippo("./python-embed.zip", "./python-embed")    
 
 /*
 fs.createReadStream("./python-embed.zip")
