@@ -18,8 +18,8 @@ async function unzippo(zipSource, zipDest) {
 
 async function main() {
 try {
-    // const {PYTHON_VERSION} = process.env
-    const PYTHON_VERSION = "3.11.4"
+    const PYTHON_VERSION = core.getInput("PYTHON_VERSION")
+    const REQUIREMENTS_PATH = core.getInput("REQUIREMENTS_PATH")
     const match = PYTHON_VERSION.match("^[0-9]\.[0-9]{1,2}\.[0-9]{1,2}$")
     if (!match){
         console.error("Invalid python version")

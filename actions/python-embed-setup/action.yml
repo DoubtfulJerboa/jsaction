@@ -2,9 +2,12 @@ name: Setup Embedded Python
 description: Downloads python embed of version specified, installs all modules in requirements.txt and gets it ready for using
 
 inputs:
-  PVER:
-    description: pythonn version
+  PYTHON_VERSION:
+    description: python version
     default: 3.11.4
+  REQUIREMENTS_PATH:
+    description: path to the requirements.txt
+    default: ./setup/requirements.txt
 
 runs:
   using: 'node20'
