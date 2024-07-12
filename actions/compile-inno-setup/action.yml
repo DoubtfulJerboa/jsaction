@@ -10,20 +10,23 @@ inputs:
     default: .\setup\setup-code.iss
 
 runs:
-  using: 'composite'
-  steps:        
-    - name: Compile the iss script
-      run: |
-        C":\Program Files (x86)\Inno Setup 6\ISCC.exe" /Qp /O".\Release" ${{ inputs.ISS_PATH }}
-      shell: pwsh
-      # env: 
-      #   isspath: ${{ inputs.ISS_PATH }}
+  using: 'node20'
+  main: "./dist/index.js"
+  # using: 'composite'
+  # steps:        
+  #   - name: Compile the iss script
+  #     run: |
+  #       C":\Program Files (x86)\Inno Setup 6\ISCC.exe" /Qp /O".\Release" ${{ inputs.ISS_PATH }}
+  #     shell: pwsh
+  #     # env: 
+  #     #   isspath: ${{ inputs.ISS_PATH }}
 
-    - name: Manual release
-      run: | 
-        $setup_file = get-childitem ".\Release" | where-object {$_.name -match '.exe$' }
-        $regex_matches = $setup_file.name | Select-String -Pattern "\d+\.\d+\.\d+"
-        $release_version = $regex_matches | Select-Object -ExpandProperty Matches | Select-Object -First 1 -ExpandProperty Value
-        gh auth login --with-token 
-        gh release create $release_version "$setup_file"
-      shell: pwsh
+  #   - name: Manual release
+  #     run: | 
+  #       ls
+  #       $setup_file = get-childitem ".\Release" | where-object {$_.name -match '.exe$' }
+  #       $regex_matches = $setup_file.name | Select-String -Pattern "\d+\.\d+\.\d+"
+  #       $release_version = $regex_matches | Select-Object -ExpandProperty Matches | Select-Object -First 1 -ExpandProperty Value
+  #       gh auth login --with-token 
+  #       gh release create $release_version "$setup_file"
+  #     shell: pwsh
