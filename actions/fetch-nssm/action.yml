@@ -1,0 +1,6 @@
+name: Fetch NSSM
+description: Fetches NSSM and unzips it 
+
+runs:
+  using: 'node20'
+  main: "./dist/index.js"
