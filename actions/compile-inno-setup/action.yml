@@ -14,7 +14,10 @@ runs:
   steps:        
     - name: Compile the iss script
       run: |
-        C":\Program Files (x86)\Inno Setup 6\ISCC.exe" /Qp /O".\Release" ${{ inputs.ISS_PATH }}
+        C":\Program Files (x86)\Inno Setup 6\ISCC.exe" /Qp /O".\Release" $isspath
+      shell: pwsh
+      env: 
+        isspath: ${{ inputs.ISS_PATH }}
 
     - name: Manual release
       run: | 
@@ -23,3 +26,4 @@ runs:
         $release_version = $regex_matches | Select-Object -ExpandProperty Matches | Select-Object -First 1 -ExpandProperty Value
         gh auth login --with-token 
         gh release create $release_version "$setup_file"
+      shell: pwsh
