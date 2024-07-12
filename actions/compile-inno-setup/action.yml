@@ -14,10 +14,10 @@ runs:
   steps:        
     - name: Compile the iss script
       run: |
-        C":\Program Files (x86)\Inno Setup 6\ISCC.exe" /Qp /O".\Release" $isspath
+        C":\Program Files (x86)\Inno Setup 6\ISCC.exe" /Qp /O".\Release" ${{ inputs.ISS_PATH }}
       shell: pwsh
-      env: 
-        isspath: ${{ inputs.ISS_PATH }}
+      # env: 
+      #   isspath: ${{ inputs.ISS_PATH }}
 
     - name: Manual release
       run: | 
