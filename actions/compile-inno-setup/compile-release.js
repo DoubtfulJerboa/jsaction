@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const { GitHub, context } = require('@actions/github');
+const { getOctokit, context } = require('@actions/github');
 // const StreamZip = require('node-stream-zip');
 // const fs = require("fs");
 // const axios = require('axios');
@@ -15,13 +15,13 @@ try {
     execSync(`"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe" /Qp /O".\\Release" "${ISS_PATH}"`)
 
 
-    const githubAuth = new GitHub(process.env.GITHUB_TOKEN);
+    const octo = new getOctokit(process.env.GITHUB_TOKEN);
     
     const { owner: currentOwner, repo: currentRepo } = context.repo
     
     console.log(context)
     
-    const createReleaseResponse = await githubAuth.repos.createRelease({
+    const createReleaseResponse = await octo.repos.createRelease({
         currentOwner,
         currentRepo,
         tag_name: "test1",

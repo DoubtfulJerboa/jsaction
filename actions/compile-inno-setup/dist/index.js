@@ -31087,7 +31087,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(4025);
-const { GitHub, context } = __nccwpck_require__(2237);
+const { getOctokit, context } = __nccwpck_require__(2237);
 // const StreamZip = require('node-stream-zip');
 // const fs = require("fs");
 // const axios = require('axios');
@@ -31103,13 +31103,13 @@ try {
     execSync(`"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe" /Qp /O".\\Release" "${ISS_PATH}"`)
 
 
-    const githubAuth = new GitHub(process.env.GITHUB_TOKEN);
+    const octo = new getOctokit(process.env.GITHUB_TOKEN);
     
     const { owner: currentOwner, repo: currentRepo } = context.repo
     
     console.log(context)
     
-    const createReleaseResponse = await githubAuth.repos.createRelease({
+    const createReleaseResponse = await octo.repos.createRelease({
         currentOwner,
         currentRepo,
         tag_name: "test1",
