@@ -39413,13 +39413,13 @@ try {
     
     console.log("Installing pip")
 
-    execSync(".\\python-embed\\python.exe .\\get-pip.py")
+    execSync(".\\python-embed\\python.exe .\\get-pip.py --no-warn-script-location")
 
     console.log("Pip installed!")
 
     console.log("Installing python requirements")
 
-    execSync(`.\\python-embed\\python.exe -m pip install -r ${REQUIREMENTS_PATH}`)
+    execSync(`.\\python-embed\\python.exe -m pip install -r ${REQUIREMENTS_PATH} --no-warn-script-location`)
 
     console.log("Python requirements intalled")
     
