@@ -13,8 +13,8 @@ runs:
   using: 'composite'
   steps:        
     - name: Compile the iss script
-        run: |
-          C":\Program Files (x86)\Inno Setup 6\ISCC.exe" /Qp /O".\Release" ${{ inputs.ISS_PATH }}
+      run: |
+        C":\Program Files (x86)\Inno Setup 6\ISCC.exe" /Qp /O".\Release" ${{ inputs.ISS_PATH }}
 
     - name: Manual release
       run: | 
