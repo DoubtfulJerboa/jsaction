@@ -13,7 +13,7 @@ try {
     const ISS_PATH = core.getInput("ISS_PATH")
     
     console.log(`Compiling ${ISS_PATH}`)
-    execSync(`C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe /Qp /O".\\Release" "${ISS_PATH}"`)
+    execSync(`"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe" /Qp /O".\\Release" "${ISS_PATH}"`)
 
 
     const githubAuth = new GitHub(process.env.GITHUB_TOKEN);
