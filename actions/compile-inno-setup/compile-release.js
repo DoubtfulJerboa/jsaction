@@ -1,9 +1,8 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
-
-const StreamZip = require('node-stream-zip');
-const fs = require("fs");
-const axios = require('axios');
+const { GitHub, context } = require('@actions/github');
+// const StreamZip = require('node-stream-zip');
+// const fs = require("fs");
+// const axios = require('axios');
 
 const execSync = require('child_process').execSync;
 
@@ -18,9 +17,9 @@ try {
 
     const githubAuth = new GitHub(process.env.GITHUB_TOKEN);
     
-    const { owner: currentOwner, repo: currentRepo } = github.context.repo
+    const { owner: currentOwner, repo: currentRepo } = context.repo
     
-    comsole.log(github.context)
+    console.log(context)
     
     const createReleaseResponse = await githubAuth.repos.createRelease({
         currentOwner,
@@ -30,7 +29,7 @@ try {
         body: bodyFileContent || body,
         draft: "false",
         prerelease: "false",
-        target_commitish: github.context.sha
+        target_commitish: context.sha
       });
 
     const {
