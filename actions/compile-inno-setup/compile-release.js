@@ -15,8 +15,6 @@ try {
     execSync(`"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe" /Qp /O".\\Release" "${ISS_PATH}"`)
     console.log("Compiled")
 
-    const octo = new getOctokit(process.env.GITHUB_TOKEN);
-    
     
     const files =  fs.readdirSync(`./Release/`)
       
@@ -33,47 +31,16 @@ try {
     const regex = /\d+\.\d+\.\d+/;
     const matches = setupFile.match(regex);
 
-    console.log(`Version numbner regex matches: ${matches}`)
+    console.log(`Version number regex matches: ${matches}`)
 
-    const releaseVersion = matches[0];
+    const releaseVersion = matches ? matches[0] : setupFile ;
+
+    core.setOutput("releaseTag", releaseVersion)
+    core.setOutput("releaseFile", setupFile)
     
-    const fileData = fs.readFileSync(`./Release/${setupFile}`)
-
-    const currentOwner = context.repo.owner
-    const currentRepo = context.repo.repo
-    
-    console.log("Creating release")
-    const createReleaseResponse = await octo.rest.repos.createRelease({
-        owner: currentOwner,
-        repo: currentRepo,
-        tag_name: releaseVersion,
-        draft: false,
-        prerelease: false,
-      });
-    console.log("Completed")
-
-
-    const {
-        data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl }
-      } = createReleaseResponse;
-
-    console.log("Uploading asset to release")
-    await octo.rest.repos.uploadReleaseAsset({
-        owner: "DoubtfulJerboa",
-        repo: "workflowtest",
-        release_id: releaseId,
-        name: setupFile,
-        data: fileData
-
-      })
-      console.log("Completed")
-
-
   } catch (error) {
-    core.setFailed(error.message);
-    console.error(error.message)
-   
+    core.setFailed(error.message);   
   }
-      }
+}
 
 main()

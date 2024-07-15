@@ -1,6 +1,6 @@
-name: Compile & release Inno Setup Script
+name: Compile Inno Setup Script
 description: |
- Compiles a .iss file and creates a github release 
+ Compiles a .iss file and returns its tag & name
  - requires a windows action runner as inno setup is preinstalled on windows and 
  - setup script must have the version number (e.g. 1.0.0) in the output filename
 
@@ -8,25 +8,12 @@ inputs:
   ISS_PATH:
     description: Path to the inno setup script
     default: .\setup\setup-code.iss
+outputs: 
+  releaseTag:
+    description: Tag of the compiled inno setup
+  releaseFile:
+    description: Name of compiled inno setup script
 
 runs:
   using: 'node20'
   main: "./dist/index.js"
-  # using: 'composite'
-  # steps:        
-  #   - name: Compile the iss script
-  #     run: |
-  #       C":\Program Files (x86)\Inno Setup 6\ISCC.exe" /Qp /O".\Release" ${{ inputs.ISS_PATH }}
-  #     shell: pwsh
-  #     # env: 
-  #     #   isspath: ${{ inputs.ISS_PATH }}
-
-  #   - name: Manual release
-  #     run: | 
-  #       ls
-  #       $setup_file = get-childitem ".\Release" | where-object {$_.name -match '.exe$' }
-  #       $regex_matches = $setup_file.name | Select-String -Pattern "\d+\.\d+\.\d+"
-  #       $release_version = $regex_matches | Select-Object -ExpandProperty Matches | Select-Object -First 1 -ExpandProperty Value
-  #       gh auth login --with-token 
-  #       gh release create $release_version "$setup_file"
-  #     shell: pwsh

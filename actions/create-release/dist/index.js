@@ -29212,14 +29212,6 @@ module.exports = require("buffer");
 
 /***/ }),
 
-/***/ 2081:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("child_process");
-
-/***/ }),
-
 /***/ 6206:
 /***/ ((module) => {
 
@@ -31092,46 +31084,41 @@ const { getOctokit, context } = __nccwpck_require__(2237);
 const fs = __nccwpck_require__(7147);
 
 
-const execSync = (__nccwpck_require__(2081).execSync);
-
-
 async function main() {
 try {
-    const ISS_PATH = core.getInput("ISS_PATH")
-    
-    console.log(`Compiling ${ISS_PATH}`)
-    execSync(`"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe" /Qp /O".\\Release" "${ISS_PATH}"`)
-    console.log("Compiled")
+    const tag = core.getInput("RELEASE_TAG")
+
+    const octo = new getOctokit(process.env.GITHUB_TOKEN);
 
     
-    const files =  fs.readdirSync(`./Release/`)
-      
-    var setupFile = files.filter(file => file.match(/\.exe$/));
-
-    if (!setupFile){
-        throw `No exe found in ./Release`
-    }
-
-    setupFile = setupFile[0]
-    console.log(`Asset to be attached to release: ${setupFile}`)
+    const currentOwner = context.repo.owner
+    const currentRepo = context.repo.repo
     
-    // Extract version number from the file name
-    const regex = /\d+\.\d+\.\d+/;
-    const matches = setupFile.match(regex);
-
-    console.log(`Version number regex matches: ${matches}`)
-
-    const releaseVersion = matches ? matches[0] : setupFile ;
-
-    core.setOutput("releaseTag", releaseVersion)
-    core.setOutput("releaseFile", setupFile)
+    console.log("Creating release")
+    const createReleaseResponse = await octo.rest.repos.createRelease({
+        owner: currentOwner,
+        repo: currentRepo,
+        tag_name: tag,
+        draft: false,
+        prerelease: false,
+    });
+    console.log("Completed")
     
+    
+    const {
+        data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl }
+    } = createReleaseResponse;
+
+    core.setOutput("releaseID", releaseId)
+        
   } catch (error) {
     core.setFailed(error.message);   
   }
 }
 
 main()
+
+
 
 })();
 

@@ -1,0 +1,14 @@
+name: Create Github Release
+description: Creates a release in GitHub with the provided tag
+
+inputs:
+  RELEASE_TAG:
+    description: Tag for the release
+    required: true
+outputs: 
+  releaseID:
+    description: ID of the created release
+
+runs:
+  using: 'node20'
+  main: "./dist/index.js"

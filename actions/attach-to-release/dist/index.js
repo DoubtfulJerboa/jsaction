@@ -31097,34 +31097,24 @@ const execSync = (__nccwpck_require__(2081).execSync);
 
 async function main() {
 try {
-    const ISS_PATH = core.getInput("ISS_PATH")
+    const releaseId = core.getInput("RELEASE_ID")
+    const path = core.getInput("FILE_PATH")
+    const setupFile = core.getInput("FILE_NAME")
+
+    const octo = new getOctokit(process.env.GITHUB_TOKEN);
     
-    console.log(`Compiling ${ISS_PATH}`)
-    execSync(`"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe" /Qp /O".\\Release" "${ISS_PATH}"`)
-    console.log("Compiled")
-
+    const fileData = fs.readFileSync(`${path}/${setupFile}`)
     
-    const files =  fs.readdirSync(`./Release/`)
-      
-    var setupFile = files.filter(file => file.match(/\.exe$/));
+    console.log("Uploading asset to release")
+    await octo.rest.repos.uploadReleaseAsset({
+        owner: "DoubtfulJerboa",
+        repo: "workflowtest",
+        release_id: releaseId,
+        name: setupFile,
+        data: fileData
 
-    if (!setupFile){
-        throw `No exe found in ./Release`
-    }
-
-    setupFile = setupFile[0]
-    console.log(`Asset to be attached to release: ${setupFile}`)
-    
-    // Extract version number from the file name
-    const regex = /\d+\.\d+\.\d+/;
-    const matches = setupFile.match(regex);
-
-    console.log(`Version number regex matches: ${matches}`)
-
-    const releaseVersion = matches ? matches[0] : setupFile ;
-
-    core.setOutput("releaseTag", releaseVersion)
-    core.setOutput("releaseFile", setupFile)
+    })
+  console.log("Completed")
     
   } catch (error) {
     core.setFailed(error.message);   
@@ -31132,6 +31122,8 @@ try {
 }
 
 main()
+
+
 
 })();
 

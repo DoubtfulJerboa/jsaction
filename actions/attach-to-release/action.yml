@@ -1,0 +1,16 @@
+name: Attach to Release
+description: Attaches a file to a release
+
+inputs:
+  RELEASE_ID:
+    description: ID of release to attach file to
+  FILE_PATH:
+    description: Path to the file to attach to release
+    default: .\Release
+  FILE_NAME:
+    description: Name of the release file
+    required: true
+
+runs:
+  using: 'node20'
+  main: "./dist/index.js"
