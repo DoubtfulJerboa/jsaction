@@ -9,27 +9,29 @@ const execSync = require('child_process').execSync;
 
 async function main() {
 try {
-    const ISS_PATH = core.getInput("ISS_PATH")
+    // const ISS_PATH = core.getInput("ISS_PATH")
     
-    console.log(`Compiling ${ISS_PATH}`)
-    execSync(`"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe" /Qp /O".\\Release" "${ISS_PATH}"`)
-
+    // console.log(`Compiling ${ISS_PATH}`)
+    // execSync(`"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe" /Qp /O".\\Release" "${ISS_PATH}"`)
+    // console.log("Compiled")
 
     const octo = new getOctokit(process.env.GITHUB_TOKEN);
     
     const { owner: currentOwner, repo: currentRepo } = context.repo
     
     console.log(context)
+
+    console.log(context.repo)
     
-    const createReleaseResponse = await octo.repos.createRelease({
+    const createReleaseResponse = await octo.rest.repos.createRelease({
         currentOwner,
         currentRepo,
         tag_name: "test1",
-        name: "",
-        body: bodyFileContent || body,
-        draft: "false",
-        prerelease: "false",
-        target_commitish: context.sha
+        // name: "",
+        // body: "bodyFileContent || body",
+        draft: false,
+        prerelease: false,
+        // target_commitish: context.sha
       });
 
     const {
@@ -41,6 +43,7 @@ try {
     core.setOutput('upload_url', uploadUrl);
   } catch (error) {
     core.setFailed(error.message);
+    console.error(error.message)
    
   }
       }
