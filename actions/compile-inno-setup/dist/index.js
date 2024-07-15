@@ -31105,15 +31105,16 @@ try {
 
     const octo = new getOctokit(process.env.GITHUB_TOKEN);
     
-    const { owner: currentOwner, repo: currentRepo } = context.repo
+    const currentOwner = context.repo.owner
+    const currentRepo = context.repo.repo
     
     console.log(context)
 
     console.log(context.repo)
     
     const createReleaseResponse = await octo.rest.repos.createRelease({
-        currentOwner,
-        currentRepo,
+        owner: currentOwner,
+        repo: currentRepo,
         tag_name: "test1",
         // name: "",
         // body: "bodyFileContent || body",
