@@ -31088,9 +31088,9 @@ var __webpack_exports__ = {};
 (() => {
 const core = __nccwpck_require__(4025);
 const { getOctokit, context } = __nccwpck_require__(2237);
-// const StreamZip = require('node-stream-zip');
+
 const fs = __nccwpck_require__(7147);
-// const axios = require('axios');
+
 
 const execSync = (__nccwpck_require__(2081).execSync);
 
@@ -31106,12 +31106,12 @@ try {
     const octo = new getOctokit(process.env.GITHUB_TOKEN);
     
     
-    const files =  fs.readdirSync(`${'./reles'}/`)
+    const files =  fs.readdirSync(`./Release/`)
       
     var setupFile = files.filter(file => file.match(/\.exe$/));
 
     if (!setupFile){
-        throw `No exe found in ${'./reles'}`
+        throw `No exe found in ./Release`
     }
 
     setupFile = setupFile[0]
@@ -31125,7 +31125,7 @@ try {
 
     const releaseVersion = matches[0];
     
-    const fileData = fs.readFileSync(`${'./reles'}/${setupFile}`)
+    const fileData = fs.readFileSync(`./Release/${setupFile}`)
 
     const currentOwner = context.repo.owner
     const currentRepo = context.repo.repo
