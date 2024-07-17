@@ -1,0 +1,48 @@
+name: Compile and Release Inno Setup Python Service
+
+on:
+  workflow_call:
+    inputs:
+      PYTHON_VERSION: 
+        required: true
+        type: string
+      REQUIREMENTS_PATH: 
+        required: true
+        type: string
+      ISS_PATH: 
+        required: true
+        type: string
+        
+jobs:
+  compileRelease:
+    runs-on: windows-2022
+    permissions:
+      contents: write # required for creating a release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DoubtfulJerboa/jsaction/actions/python-embed-setup@v15
+        with:
+          PYTHON_VERSION: ${{inputs.PYTHON_VERSION}}
+          REQUIREMENTS_PATH: ${{inputs.REQUIREMENTS_PATH}}
+
+      - uses: DoubtfulJerboa/jsaction/actions/fetch-nssm@v15
+
+      - id: compileISS
+        uses: DoubtfulJerboa/jsaction/actions/compile-inno-setup@v15
+        with:
+          ISS_PATH: ${{inputs.ISS_PATH}}
+
+      - id: createRelease
+        uses: DoubtfulJerboa/jsaction/actions/create-release@v15
+        with:
+          RELEASE_TAG: ${{steps.compileISS.outputs.releaseTag}}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - id: attachExe
+        uses: DoubtfulJerboa/jsaction/actions/attach-to-release@v15
+        with:
+          RELEASE_ID: ${{steps.createRelease.outputs.releaseID}}
+          FILE_NAME: ${{steps.compileISS.outputs.releaseFile}}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
